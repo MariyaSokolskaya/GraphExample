@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
     Resources resources;
     Bitmap image;
@@ -21,24 +23,29 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
     float touchX, touchY;
     float dx, dy;
     SurfaceThread thread;
-
+    Sprite sprite;
+    ArrayList<Sprite> sprites = new ArrayList<>();
     public MySurface(Context context) {
         super(context);
         resources = getResources();
-        image = BitmapFactory.decodeResource(resources, R.drawable.simoncatmini);
+        image = BitmapFactory.decodeResource(resources, R.drawable.sprites);
         paint = new Paint();
         paint.setColor(Color.YELLOW);
         imageX = 200;
         imageY = 300;
         getHolder().addCallback(this); //активация интерфейса
+        //sprite = new Sprite(image, this, imageX, imageY);
+        sprites.add(new Sprite(image, this, imageX, imageY));
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        imageX += dx;
-        imageY += dy;
-        canvas.drawBitmap(image, imageX, imageY, paint);
+        //imageX += dx;
+        //imageY += dy;
+        //canvas.drawBitmap(image, imageX, imageY, paint);
+        for(Sprite sprite: sprites)
+            sprite.draw(canvas);
     }
 
     @Override
@@ -46,7 +53,9 @@ public class MySurface extends SurfaceView implements SurfaceHolder.Callback {
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             touchX = event.getX();
             touchY = event.getY();
-            calcSteps();
+            sprites.add(new Sprite(image, this, touchX, touchY));
+            for(Sprite sprite: sprites)
+                sprite.calcSteps(touchX, touchY);
         }
         return true;
     }
