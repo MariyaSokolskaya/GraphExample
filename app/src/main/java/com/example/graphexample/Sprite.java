@@ -51,4 +51,13 @@ public class Sprite {
         dx = (touchX - x) / 50;
         dy = (touchY - y) / 50;
     }
+
+    public void controlBarrier(int x1, int y1, int x2, int y2){
+        Rect spriteRect = new Rect((int)x, (int)y,
+                (int)x + widthFrame, (int)y + heightFrame);
+        if(spriteRect.intersect(x1, y1, x2, y2)){
+            dx = -dx;
+            //поведение зависит от геймплея
+        }
+    }
 }
